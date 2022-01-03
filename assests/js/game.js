@@ -1,17 +1,24 @@
+
+// Game States 
+// "WIN" - Player robot has defeated all enemy-robots
+//      * Fight all enemy-robots
+//      * Defeat each enemy-robot
+// "LOSE" - Player robot's health is zero or less
+// ///////////////////////////////////////////////////////////// //
+// Make player (This should eventually be a object or class.)
 let playerName = prompt("What is your robot's name?");
 let playerHealth = 100;
 let playerAttack = 10;
 let playerMoney = 10;
 
-console.log(playerName, playerAttack, playerHealth)
-
-let enemyName = "Roborto";
+//Make enemy (This should eventually be a object or class.)
+let enemyNames = ["Roborto", "Amy Android", "Robo Trumble"];
 let enemyHealth = 50;
 let enemyAttact = 12;
 
-const fight = function () {
+const fight = function (enemyName) {
     alert("Welcome to Robot Gladiators!");
-    var promptFight = prompt("Would you like to FIGHT or SKIP this fight? enter 'FIGHT' or 'SKIP' to choose.")
+    let promptFight = prompt("Would you like to FIGHT or SKIP this fight? enter 'FIGHT' or 'SKIP' to choose.");
     if (promptFight === "fight" || promptFight === "FIGHT") {
         // Subtract the value of 'playerAttack from the value of 'enemyHealth'
         enemyHealth = enemyHealth - playerAttack;
@@ -71,4 +78,6 @@ const fight = function () {
     }
 }
 
-fight();
+for (let i = 0; i < enemyNames.length; i++) {
+    fight(enemyNames[i]);
+}
