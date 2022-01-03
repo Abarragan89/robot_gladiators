@@ -16,68 +16,59 @@ let enemyNames = ["Roborto", "Amy Android", "Robo Trumble"];
 let enemyHealth = 50;
 let enemyAttact = 12;
 
-const fight = function (enemyName) {
-    alert("Welcome to Robot Gladiators!");
-    let promptFight = prompt("Would you like to FIGHT or SKIP this fight? enter 'FIGHT' or 'SKIP' to choose.");
-    if (promptFight === "fight" || promptFight === "FIGHT") {
-        // Subtract the value of 'playerAttack from the value of 'enemyHealth'
-        enemyHealth = enemyHealth - playerAttack;
 
-        // Log a resluting message to the console so we know that it worked. 
-        alert(playerName + " attacked " + enemyName + ".")
-        //check enemy's health
-        if (enemyHealth === 0) {
-            alert(enemyName + " has died");
-        } else {
-            alert(enemyName + " still has " + enemyHealth + " health left.")
-        }
+    const fight = function (enemyName) {
+        
+            let promptFight = prompt("Would you like to FIGHT " + enemyName + " or SKIP this fight? enter 'FIGHT' or 'SKIP' to choose.");
+            if (promptFight === "fight" || promptFight === "FIGHT") {
+                // Subtract the value of 'playerAttack from the value of 'enemyHealth'
+            while (enemyHealth > 0 && playerHealth > 0) {
+                enemyHealth = enemyHealth - playerAttack;
 
-        //Subtract the value of 'enemyAttack from the value of playerHealth
-        playerHealth = playerHealth - enemyAttact;
-        alert(enemyName + " attacked " + playerName + ".")
-        //Check users health
-        if (playerHealth <= 0) {
-            alert(playerName + " has died!")
-        } else {
-            alert(playerName + " still has " + playerHealth + " health left.");
-        }
-        // Subtract the value of 'playerAttack from the value of 'enemyHealth'
-        enemyHealth = enemyHealth - playerAttack;
+                // Log a resluting message to the console so we know that it worked. 
+                alert(playerName + " attacked " + enemyName + ".")
+                //check enemy's health
+                if (enemyHealth === 0) {
+                    alert(enemyName + " has died");
+                    break;
+                } else {
+                    alert(enemyName + " still has " + enemyHealth + " health left.")
+                }
 
-        // Log a resluting message to the console so we know that it worked. 
-        alert(playerName + " attacked " + enemyName + ".")
-        //check enemy's health
-        if (enemyHealth === 0) {
-            alert(enemyName + " has died");
+                //Subtract the value of 'enemyAttack from the value of playerHealth
+                playerHealth = playerHealth - enemyAttact;
+                alert(enemyName + " attacked " + playerName + ".")
+                //Check users health
+                if (playerHealth <= 0) {
+                    alert(playerName + " has died!")
+                    break;
+                } else {
+                    alert(playerName + " still has " + playerHealth + " health left.");
+                }
+            }
+        } else if (promptFight === "skip" || promptFight === "SKIP"){
+            //confirm player wants to skip 
+            let confirmSkip = confirm("Are you sure you'd like to quit?")
+            //if yes(true), leave fight
+            if (confirmSkip) {
+                alert(playerName + " has decided to skip this fight. Goodbye!");
+                //subtract money from the playerMoney for skipping
+                playerMoney = playerMoney - 10;
+                console.log("playerMoney", playerMoney);
+                
+            } else {
+                fight();
+            }
         } else {
-            alert(enemyName + " still has " + enemyHealth + " health left.")
+            alert("You need to choose a valid option. Try again!")
         }
+    }   
 
-        //Subtract the value of 'enemyAttack from the value of playerHealth
-        playerHealth = playerHealth - enemyAttact;
-        alert(enemyName + " attacked " + playerName + ".")
-        //Check users health
-        if (playerHealth <= 0) {
-            alert(playerName + " has died!")
-        } else {
-            alert(playerName + " still has " + playerHealth + " health left.");
-        }
-    } else if (promptFight === "skip" || promptFight === "SKIP"){
-        //confirm player wants to skip 
-        let confirmSkip = confirm("Are you sure you'd like to quit?")
-        //if yes(true), leave fight
-        if (confirmSkip) {
-            alert(playerName + " has decided to skip this fight. Goodbye!");
-        //subtract money from the playerMoney for skipping
-        playerMoney = playerMoney - 2;
-        } else {
-            fight();
-        }
-    } else {
-        alert("You need to choose a valid option. Try again!")
-    }
-}
 
 for (let i = 0; i < enemyNames.length; i++) {
-    fight(enemyNames[i]);
+    debugger;
+    pickedEnemyName = enemyNames[i];
+    enemyHealth = 50;
+    fight(pickedEnemyName);
 }
+
