@@ -18,7 +18,6 @@ let enemyAttact = 12;
 
 
     const fight = function (enemyName) {
-        
             let promptFight = prompt("Would you like to FIGHT " + enemyName + " or SKIP this fight? enter 'FIGHT' or 'SKIP' to choose.");
             if (promptFight === "fight" || promptFight === "FIGHT") {
                 // Subtract the value of 'playerAttack from the value of 'enemyHealth'
@@ -26,24 +25,18 @@ let enemyAttact = 12;
                 enemyHealth = enemyHealth - playerAttack;
 
                 // Log a resluting message to the console so we know that it worked. 
-                alert(playerName + " attacked " + enemyName + ".")
+                alert(playerName + " attacked " + enemyName + "." + enemyName + " still has " + enemyHealth + " health left.")
                 //check enemy's health
                 if (enemyHealth === 0) {
                     alert(enemyName + " has died");
                     break;
-                } else {
-                    alert(enemyName + " still has " + enemyHealth + " health left.")
                 }
-
                 //Subtract the value of 'enemyAttack from the value of playerHealth
                 playerHealth = playerHealth - enemyAttact;
-                alert(enemyName + " attacked " + playerName + ".")
+                alert(enemyName + " attacked " + playerName + "." + playerName + " still has " + playerHealth + " health left.")
                 //Check users health
                 if (playerHealth <= 0) {
                     alert(playerName + " has died!")
-                    break;
-                } else {
-                    alert(playerName + " still has " + playerHealth + " health left.");
                 }
             }
         } else if (promptFight === "skip" || promptFight === "SKIP"){
@@ -54,19 +47,23 @@ let enemyAttact = 12;
                 alert(playerName + " has decided to skip this fight. Goodbye!");
                 //subtract money from the playerMoney for skipping
                 playerMoney = playerMoney - 10;
-                console.log("playerMoney", playerMoney);
+                return;
                 
             } else {
                 fight();
             }
         } else {
             alert("You need to choose a valid option. Try again!")
+            return;
         }
     }   
 
 
 for (let i = 0; i < enemyNames.length; i++) {
-    debugger;
+    if (playerHealth < 0) {
+        alert("Welcome to Robot Gladiators")
+    }
+    alert("Welcome to Robot Gladiators! Round " + ( i + 1 ));
     pickedEnemyName = enemyNames[i];
     enemyHealth = 50;
     fight(pickedEnemyName);
