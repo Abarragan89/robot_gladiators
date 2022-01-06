@@ -16,46 +16,51 @@ let enemyNames = ["Roborto", "Amy Android", "Robo Trumble"];
 let enemyHealth = 50;
 let enemyAttact = 12;
 
+const randomNumber = function(min, max) {
+    let value = Math.floor(Math.random() * (max - min + 1) + min)
+    return value;
+}
+const fight = function (enemyName) {
+        let promptFight = prompt("Would you like to FIGHT " + enemyName + " or SKIP this fight? enter 'FIGHT' or 'SKIP' to choose.");
+        if (promptFight === "fight" || promptFight === "FIGHT") {
+            // Subtract the value of 'playerAttack from the value of 'enemyHealth'
+        while (enemyHealth > 0 && playerHealth > 0) {
+            let damage = randomNumber(playerAttack - 3, playerAttack);
+            enemyHealth = Math.max(0, enemyHealth - damage);
 
-    const fight = function (enemyName) {
-            let promptFight = prompt("Would you like to FIGHT " + enemyName + " or SKIP this fight? enter 'FIGHT' or 'SKIP' to choose.");
-            if (promptFight === "fight" || promptFight === "FIGHT") {
-                // Subtract the value of 'playerAttack from the value of 'enemyHealth'
-            while (enemyHealth > 0 && playerHealth > 0) {
-                enemyHealth = enemyHealth - playerAttack;
-
-                // Log a resluting message to the console so we know that it worked. 
-                alert(playerName + " attacked " + enemyName + "." + enemyName + " still has " + enemyHealth + " health left.")
-                //check enemy's health
-                if (enemyHealth <= 0) {
-                    alert(enemyName + " has died");
-                    break;
-                }
-                //Subtract the value of 'enemyAttack from the value of playerHealth
-                playerHealth = playerHealth - enemyAttact;
-                alert(enemyName + " attacked " + playerName + "." + playerName + " still has " + playerHealth + " health left.")
-                //Check users health
-                if (playerHealth <= 0) {
-                    alert(playerName + " has died!")
-                }
+            // Log a resluting message to the console so we know that it worked. 
+            alert(playerName + " attacked " + enemyName + "." + enemyName + " still has " + enemyHealth + " health left.")
+            //check enemy's health
+            if (enemyHealth <= 0) {
+                alert(enemyName + " has died");
+                break;
             }
-        } else if (promptFight === "skip" || promptFight === "SKIP"){
-            //confirm player wants to skip 
-            let confirmSkip = confirm("Are you sure you'd like to quit?")
-            //if yes(true), leave fight
-            if (confirmSkip) {
-                alert(playerName + " has decided to skip this fight. Goodbye!");
-                //subtract money from the playerMoney for skipping
-                playerMoney = playerMoney - 10;
-                
-            } else {
-                fight();
+            //Subtract the value of 'enemyAttack from the value of playerHealth
+            damage = randomNumber(playerAttack - 3, playerAttack);
+            playerHealth = Math.max(0, playerHealth - damage);
+            alert(enemyName + " attacked " + playerName + "." + playerName + " still has " + playerHealth + " health left.")
+            //Check users health
+            if (playerHealth <= 0) {
+                alert(playerName + " has died!")
             }
-        } else {
-            alert("You need to choose a valid option. Try again!")
-            return;
         }
-    }   
+    } else if (promptFight === "skip" || promptFight === "SKIP"){
+        //confirm player wants to skip 
+        let confirmSkip = confirm("Are you sure you'd like to quit?")
+        //if yes(true), leave fight
+        if (confirmSkip) {
+            alert(playerName + " has decided to skip this fight. Goodbye!");
+            //subtract money from the playerMoney for skipping
+            playerMoney = Math.max(0, playerMoney - 10)
+            
+        } else {
+            fight();
+        }
+    } else {
+        alert("You need to choose a valid option. Try again!")
+        return;
+    }
+}   
 
 const startGame = function() {
     // reset player stats
@@ -67,7 +72,7 @@ const startGame = function() {
         if (playerHealth > 0) {
             alert("Welcome to Robot Gladiators! Round " + ( i + 1 ));
             pickedEnemyName = enemyNames[i];
-            enemyHealth = 50;
+            enemyHealth = randomNumber(40, 60);
             fight(pickedEnemyName);
             if (playerHealth > 0 && i < enemyNames.length -1) {
                 let storeConfirm = confirm("The fight is over. Visit the store before the next round?")
@@ -106,7 +111,7 @@ const shop = function(){
         case "refill":
             if (playerMoney >= 7) {
                 alert("Refilling player's health by 20 for 7 dollars.");
-    
+                
                 //incresase health and decrease money
                 playerHealth = playerHealth + 20;
                 playerMoney = playerMoney - 7;
@@ -118,7 +123,7 @@ const shop = function(){
         case "upgrade":
             if (playerMoney >= 7) {
                 alert("Upgrading player's attack by 6 for 7 dollars.")
-    
+                
                 //increase attack and decrease money
                 playerAttack = playerAttack + 6;
                 playerMoney = playerMoney - 7;
