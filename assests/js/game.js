@@ -84,11 +84,16 @@ const fightOrSkip = function () {
     }
 }
 
-    const fight = function (enemy) {
-        if (fightOrSkip()) {
-            // if true, leave fight by breaking loop
-        }
-        while (enemy.health > 0 && playerInfo.health > 0) {
+const fight = function (enemy) {
+    let isPlayerTurn = true;
+    if (Math.random() > 0.5) {
+        isPlayerTurn = false;
+    }
+    if (fightOrSkip()) {
+        // if true, leave fight by breaking loop
+    }
+    while (enemy.health > 0 && playerInfo.health > 0) {
+        if (isPlayerTurn) {
             let damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
             enemy.health = Math.max(0, enemy.health - damage);
 
@@ -97,8 +102,11 @@ const fightOrSkip = function () {
             //check enemy's health
             if (enemy.health <= 0) {
                 alert(enemy.name + " has died");
+                playerInfo.money = playerInfo.money + 20;
                 break;
             }
+            //player gets attacked first
+        } else {
             //Subtract the value of 'enemy.attack from the value of playerInfo.health
             damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
             playerInfo.health = Math.max(0, playerInfo.health - damage);
@@ -108,67 +116,68 @@ const fightOrSkip = function () {
                 alert(playerInfo.name + " has died!")
             }
         }
+        isPlayerTurn = !isPlayerTurn;
     }
+}
+const startGame = function () {
+    // reset player stats
+    playerInfo.reset();
 
-    const startGame = function () {
-        // reset player stats
-        playerInfo.reset();
-
-        for (let i = 0; i < enemyInfo.length; i++) {
-            if (playerInfo.health > 0) {
-                alert("Welcome to Robot Gladiators! Round " + (i + 1));
-                pickedEnemyObj = enemyInfo[i];
-                pickedEnemyObj.health = randomNumber(40, 60);
-                fight(pickedEnemyObj);
-                if (playerInfo.health > 0 && i < enemyInfo.length - 1) {
-                    let storeConfirm = confirm("The fight is over. Visit the store before the next round?")
-                    if (storeConfirm) {
-                        shop();
-                    }
-                }
-            } else {
-                alert("You have lost your robot in battle! Game Over!");
-                break;
-            }
-        }
-        endGame();
-
-    };
-
-    const endGame = function () {
+    for (let i = 0; i < enemyInfo.length; i++) {
         if (playerInfo.health > 0) {
-            alert("Great job, you've survived the game! You now have a score of " + playerInfo.money + ".");
+            alert("Welcome to Robot Gladiators! Round " + (i + 1));
+            pickedEnemyObj = enemyInfo[i];
+            pickedEnemyObj.health = randomNumber(40, 60);
+            fight(pickedEnemyObj);
+            if (playerInfo.health > 0 && i < enemyInfo.length - 1) {
+                let storeConfirm = confirm("The fight is over. Visit the store before the next round?")
+                if (storeConfirm) {
+                    shop();
+                }
+            }
         } else {
-            alert("You've lost your robot in battle.")
-        }
-        let playAgainConfirm = confirm("Would you like to play again?")
-
-        if (playAgainConfirm) {
-            startGame();
-        } else {
-            alert("Thank you for playing Robot Gladiators! Come back again soon!");
+            alert("You have lost your robot in battle! Game Over!");
+            break;
         }
     }
+    endGame();
 
-    const shop = function () {
-        let shopOptionPrompt = prompt("Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter 1 for REFILL, 2 for UPGRADE, 3 to LEAVE.")
-        shopOptionPrompt = parseInt(shopOptionPrompt);
-        switch (shopOptionPrompt) {
-            case 1:
-                playerInfo.refillHealth();
-                break;
-            case 2:
-                playerInfo.upgradeAttack();
-            case 3:
-                alert("Leaving the store.");
-                //do nothing, so function will end
-                break;
-            default:
-                alert("You did not pick a valid option. Try again.");
-                //call shop() again to force player to pick a valid option
-                shop();
-                break;
-        }
+};
+
+const endGame = function () {
+    if (playerInfo.health > 0) {
+        alert("Great job, you've survived the game! You now have a score of " + playerInfo.money + ".");
+    } else {
+        alert("You've lost your robot in battle.")
     }
-    debugger;
-    startGame();
+    let playAgainConfirm = confirm("Would you like to play again?")
+
+    if (playAgainConfirm) {
+        startGame();
+    } else {
+        alert("Thank you for playing Robot Gladiators! Come back again soon!");
+    }
+}
+
+const shop = function () {
+    let shopOptionPrompt = prompt("Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter 1 for REFILL, 2 for UPGRADE, 3 to LEAVE.")
+    shopOptionPrompt = parseInt(shopOptionPrompt);
+    switch (shopOptionPrompt) {
+        case 1:
+            playerInfo.refillHealth();
+            break;
+        case 2:
+            playerInfo.upgradeAttack();
+        case 3:
+            alert("Leaving the store.");
+            //do nothing, so function will end
+            break;
+        default:
+            alert("You did not pick a valid option. Try again.");
+            //call shop() again to force player to pick a valid option
+            shop();
+            break;
+    }
+}
+debugger;
+startGame();
