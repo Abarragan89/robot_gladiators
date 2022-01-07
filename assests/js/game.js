@@ -6,42 +6,79 @@
 // "LOSE" - Player robot's health is zero or less
 // ///////////////////////////////////////////////////////////// //
 // Make player (This should eventually be a object or class.)
-let playerName = prompt("What is your robot's name?");
-let playerHealth = 100;
-let playerAttack = 10;
-let playerMoney = 10;
-
-//Make enemy (This should eventually be a object or class.)
-let enemyNames = ["Roborto", "Amy Android", "Robo Trumble"];
-let enemyHealth = 50;
-let enemyAttact = 12;
-
 const randomNumber = function(min, max) {
     let value = Math.floor(Math.random() * (max - min + 1) + min)
     return value;
 }
-const fight = function (enemyName) {
-        let promptFight = prompt("Would you like to FIGHT " + enemyName + " or SKIP this fight? enter 'FIGHT' or 'SKIP' to choose.");
+const playerInfo = {
+    name: prompt("What is your robot's name?"),
+    health: 100,
+    attack: 10,
+    money: 10,
+    reset: function() {
+        this.health = 100;
+        this.money = 10;
+        this.attack = 10
+    },
+    refillHealth: function() {
+        if(this.money >= 7) {
+            alert("Refilling player's health by 20 for 7 dollars.");
+            this.health += 20;
+            this.money -= 7;
+        } else {
+            alert("You don't have enough money!");
+        }
+    },
+    upgradeAttack: function() {
+        if (this.money >= 7) {
+            alert("Upgrading player's attack by 6 for 7 dollars.");
+            this.attack += 6;
+            this.money -= 7;
+        } else {
+            alert("You don't have enough money!");
+        }
+    }
+};
+
+//Make enemies (This should eventually be a object or class.)
+enemyInfo = [
+    {
+        name: "Roborto",
+        attack: randomNumber(10, 14)
+    },
+    {
+        name: "Amy Android",
+        attack: randomNumber(10, 14)
+    },
+    {
+        name: "Robo Trumble",
+        attack: randomNumber(10, 14)
+    }
+];
+
+const fight = function (enemy) {
+    console.log(enemy)
+        let promptFight = prompt("Would you like to FIGHT " + enemy.name + " or SKIP this fight? enter 'FIGHT' or 'SKIP' to choose.");
         if (promptFight === "fight" || promptFight === "FIGHT") {
-            // Subtract the value of 'playerAttack from the value of 'enemyHealth'
-        while (enemyHealth > 0 && playerHealth > 0) {
-            let damage = randomNumber(playerAttack - 3, playerAttack);
-            enemyHealth = Math.max(0, enemyHealth - damage);
+            // Subtract the value of 'playerInfo.attack from the value of 'enemy.health'
+        while (enemy.health > 0 && playerInfo.health > 0) {
+            let damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
+            enemy.health = Math.max(0, enemy.health - damage);
 
             // Log a resluting message to the console so we know that it worked. 
-            alert(playerName + " attacked " + enemyName + "." + enemyName + " still has " + enemyHealth + " health left.")
+            alert(playerInfo.name + " attacked " + enemy.name + "." + enemy.name + " still has " + enemy.health + " health left.")
             //check enemy's health
-            if (enemyHealth <= 0) {
-                alert(enemyName + " has died");
+            if (enemy.health <= 0) {
+                alert(enemy.name + " has died");
                 break;
             }
-            //Subtract the value of 'enemyAttack from the value of playerHealth
-            damage = randomNumber(playerAttack - 3, playerAttack);
-            playerHealth = Math.max(0, playerHealth - damage);
-            alert(enemyName + " attacked " + playerName + "." + playerName + " still has " + playerHealth + " health left.")
+            //Subtract the value of 'enemy.attack from the value of playerInfo.health
+            damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
+            playerInfo.health = Math.max(0, playerInfo.health - damage);
+            alert(enemy.name + " attacked " + playerInfo.name + ". " + playerInfo.name + " still has " + playerInfo.health + " health left.")
             //Check users health
-            if (playerHealth <= 0) {
-                alert(playerName + " has died!")
+            if (playerInfo.health <= 0) {
+                alert(playerInfo.name + " has died!")
             }
         }
     } else if (promptFight === "skip" || promptFight === "SKIP"){
@@ -49,32 +86,28 @@ const fight = function (enemyName) {
         let confirmSkip = confirm("Are you sure you'd like to quit?")
         //if yes(true), leave fight
         if (confirmSkip) {
-            alert(playerName + " has decided to skip this fight. Goodbye!");
-            //subtract money from the playerMoney for skipping
-            playerMoney = Math.max(0, playerMoney - 10)
+            alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+            //subtract money from the playerInfo.money for skipping
+            playerInfo.money = Math.max(0, playerInfo.money - 10)
             
-        } else {
-            fight();
         }
     } else {
         alert("You need to choose a valid option. Try again!")
-        return;
+        fight(pickedEnemyObj);
     }
 }   
 
 const startGame = function() {
     // reset player stats
-    playerHealth = 100;
-    playerAttack = 10;
-    playerMoney = 10;
+    playerInfo.reset();
 
-    for (let i = 0; i < enemyNames.length; i++) {
-        if (playerHealth > 0) {
+    for (let i = 0; i < enemyInfo.length; i++) {
+        if (playerInfo.health > 0) {
             alert("Welcome to Robot Gladiators! Round " + ( i + 1 ));
-            pickedEnemyName = enemyNames[i];
-            enemyHealth = randomNumber(40, 60);
-            fight(pickedEnemyName);
-            if (playerHealth > 0 && i < enemyNames.length -1) {
+            pickedEnemyObj = enemyInfo[i];
+            pickedEnemyObj.health = randomNumber(40, 60);
+            fight(pickedEnemyObj);
+            if (playerInfo.health > 0 && i < enemyInfo.length - 1) {
                 let storeConfirm = confirm("The fight is over. Visit the store before the next round?")
                 if (storeConfirm){
                     shop();
@@ -90,8 +123,8 @@ const startGame = function() {
 };
 
 const endGame = function() {
-    if (playerHealth > 0) {
-        alert("Great job, you've survived the game! You now have a score of " + playerMoney + "." );
+    if (playerInfo.health > 0) {
+        alert("Great job, you've survived the game! You now have a score of " + playerInfo.money + "." );
     } else {
         alert("You've lost your robot in battle.")
     }
@@ -106,31 +139,13 @@ const endGame = function() {
 
 const shop = function(){
     let shopOptionPrompt = prompt("Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one: 'REFILL', 'UPGRADE', 'LEAVE' to make a choice.")
-    let option = shopOptionPrompt.toLocaleLowerCase();
+    let option = shopOptionPrompt.toLowerCase();
     switch(option) {
         case "refill":
-            if (playerMoney >= 7) {
-                alert("Refilling player's health by 20 for 7 dollars.");
-                
-                //incresase health and decrease money
-                playerHealth = playerHealth + 20;
-                playerMoney = playerMoney - 7;
-                
-            } else {
-                alert("You don't have enough money!")
-            }
+            playerInfo.refillHealth();
             break;
         case "upgrade":
-            if (playerMoney >= 7) {
-                alert("Upgrading player's attack by 6 for 7 dollars.")
-                
-                //increase attack and decrease money
-                playerAttack = playerAttack + 6;
-                playerMoney = playerMoney - 7;
-            } else {
-                alert("You don't have enough money!");
-            }
-            break;
+            playerInfo.upgradeAttack();
         case "leave":
             alert("Leaving the store.");
 
@@ -144,5 +159,5 @@ const shop = function(){
             break;
     }
 }
-
+debugger;
 startGame();
