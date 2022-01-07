@@ -20,11 +20,11 @@ const getPlayerName = function () {
 };
 const playerInfo = {
     name: getPlayerName(),
-    health: 100,
+    health: 150,
     attack: 10,
     money: 10,
     reset: function () {
-        this.health = 100;
+        this.health = 150;
         this.money = 10;
         this.attack = 10
     },
@@ -79,9 +79,10 @@ const fightOrSkip = function () {
             playerInfo.money = Math.max(0, playerInfo.money - 10);
             return true;
         }
-    } else {
+    } else if (promptFight === "fight") {
         return false;
     }
+    fightOrSkip();
 }
 
 const fight = function (enemy) {
@@ -98,7 +99,7 @@ const fight = function (enemy) {
             enemy.health = Math.max(0, enemy.health - damage);
 
             // Log a resluting message to the console so we know that it worked. 
-            alert(playerInfo.name + " attacked " + enemy.name + "." + enemy.name + " still has " + enemy.health + " health left.")
+            alert(playerInfo.name + " attacked " + enemy.name + ". " + enemy.name + " still has " + enemy.health + " health left.")
             //check enemy's health
             if (enemy.health <= 0) {
                 alert(enemy.name + " has died");
@@ -145,13 +146,20 @@ const startGame = function () {
 };
 
 const endGame = function () {
+    alert("The game has ended. Let's see how you did.")
+    let highScore = localStorage.getItem("highscore");
     if (playerInfo.health > 0) {
         alert("Great job, you've survived the game! You now have a score of " + playerInfo.money + ".");
+        if (!highScore || playerInfo.money > highScore ){
+            alert("Congrats! You set a new high score");
+            localStorage.setItem("highscore", playerInfo.money);
+            alert(playerInfo.name + " now has the high score of " + playerInfo.money  + "!")
+        }
     } else {
         alert("You've lost your robot in battle.")
+        alert(playerInfo.name + " did not beat the high score of " + highScore + ".")
     }
     let playAgainConfirm = confirm("Would you like to play again?")
-
     if (playAgainConfirm) {
         startGame();
     } else {
