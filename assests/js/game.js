@@ -147,12 +147,12 @@ const startGame = function () {
 
 const endGame = function () {
     alert("The game has ended. Let's see how you did.")
-    let highScore = localStorage.getItem("highscore");
+    let highScore = localStorage.getItem("highscore_gladiators");
     if (playerInfo.health > 0) {
         alert("Great job, you've survived the game! You now have a score of " + playerInfo.money + ".");
         if (!highScore || playerInfo.money > highScore ){
             alert("Congrats! You set a new high score");
-            localStorage.setItem("highscore", playerInfo.money);
+            localStorage.setItem("highscore_gladiators", playerInfo.money);
             alert(playerInfo.name + " now has the high score of " + playerInfo.money  + "!")
         }
     } else {
